@@ -17,6 +17,40 @@ English | [中文](README_ZH.md) | [日本語](README_JA.md) | [Deutsch](README_
 
 </div>
 
+## Ubuntu 20.04: Install and Run via Flatpak
+
+If AppImage or `.deb` cannot run on Ubuntu 20.04 due to glibc/library version issues, use Flatpak.
+
+Use the exact commands below:
+
+```bash
+# 0) (Optional) check whether Flatpak is already installed
+flatpak --version
+
+# 1) Install Flatpak (if command above is missing)
+sudo apt update
+sudo apt install -y flatpak
+
+# 2) Add Flathub remote (one-time)
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+# 3) Install required runtime (one-time)
+flatpak install --user flathub org.gnome.Platform//49 org.gnome.Sdk//49
+
+# 4) Install CC Switch Flatpak package (replace path if needed)
+flatpak install --user /home/daniel/2T/ap/tmp/cc-switch/dist-flatpak/CC-Switch-Linux.flatpak
+
+# 5) Run
+flatpak run com.ccswitch.desktop
+
+# 6) (Optional) upgrade by reinstalling the same .flatpak
+flatpak install --user /home/daniel/2T/ap/tmp/cc-switch/dist-flatpak/CC-Switch-Linux.flatpak
+
+# 7) (Optional) clean reinstall
+flatpak uninstall -y com.ccswitch.desktop
+flatpak install --user /home/daniel/2T/ap/tmp/cc-switch/dist-flatpak/CC-Switch-Linux.flatpak
+```
+
 ## ❤️Sponsor
 
 > [Want to appear here?](mailto:farion1231@gmail.com)

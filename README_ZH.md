@@ -17,6 +17,40 @@
 
 </div>
 
+## Ubuntu 20.04：通过 Flatpak 安装与运行
+
+如果 AppImage 或 `.deb` 在 Ubuntu 20.04 上因 glibc / 系统库版本问题无法运行，请使用 Flatpak。
+
+请直接按以下命令执行：
+
+```bash
+# 0) （可选）先检查是否已安装 Flatpak
+flatpak --version
+
+# 1) 安装 Flatpak（如果上一步命令不存在）
+sudo apt update
+sudo apt install -y flatpak
+
+# 2) 添加 Flathub 源（一次即可）
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+# 3) 安装运行时（一次即可）
+flatpak install --user flathub org.gnome.Platform//49 org.gnome.Sdk//49
+
+# 4) 安装 CC Switch Flatpak 包（按你的实际路径替换）
+flatpak install --user /home/daniel/2T/ap/tmp/cc-switch/dist-flatpak/CC-Switch-Linux.flatpak
+
+# 5) 运行
+flatpak run com.ccswitch.desktop
+
+# 6) （可选）升级：重复安装同一个 .flatpak 即可覆盖
+flatpak install --user /home/daniel/2T/ap/tmp/cc-switch/dist-flatpak/CC-Switch-Linux.flatpak
+
+# 7) （可选）彻底重装
+flatpak uninstall -y com.ccswitch.desktop
+flatpak install --user /home/daniel/2T/ap/tmp/cc-switch/dist-flatpak/CC-Switch-Linux.flatpak
+```
+
 ## ❤️赞助商
 
 > [想出现在这里？](mailto:farion1231@gmail.com)
