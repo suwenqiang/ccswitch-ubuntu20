@@ -40,12 +40,13 @@ RUN curl -fsSLo /opt/node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-
 
 ENV PATH="/opt/node-v${NODE_VERSION}-linux-x64/bin:/home/builder/.cargo/bin:${PATH}"
 
+RUN corepack enable \
+    && corepack prepare "pnpm@${PNPM_VERSION}" --activate
+
 USER builder
 WORKDIR /workspace
 
-RUN corepack enable \
-    && corepack prepare "pnpm@${PNPM_VERSION}" --activate \
-    && curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain ${RUST_TOOLCHAIN} --profile minimal \
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain ${RUST_TOOLCHAIN} --profile minimal \
     && rustup component add rustfmt clippy
 
 CMD ["bash"]
