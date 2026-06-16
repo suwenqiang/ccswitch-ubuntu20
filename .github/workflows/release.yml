@@ -229,6 +229,13 @@ jobs:
         if: runner.os == 'Linux'
         run: pnpm tauri build --bundles appimage,deb,rpm
 
+      - name: Build Flatpak Artifact (Linux x86_64)
+        if: runner.os == 'Linux' && matrix.os == 'ubuntu-22.04'
+        shell: bash
+        run: |
+          set -euxo pipefail
+          scripts/build-flatpak-artifact.sh
+
       - name: Prepare macOS Assets
         if: runner.os == 'macOS'
         shell: bash
@@ -477,6 +484,17 @@ jobs:
             echo "No .rpm found (optional)"
           fi
 
+          # Flatpak artifact (x86_64 Linux only)
+          if [ "$ARCH" = "x86_64" ]; then
+            FLATPAK="dist-flatpak/CC-Switch-Linux.flatpak"
+            if [ -f "$FLATPAK" ]; then
+              cp "$FLATPAK" "release-assets/CC-Switch-${VERSION}-Linux-${ARCH}.flatpak"
+              echo "Flatpak package copied: CC-Switch-${VERSION}-Linux-${ARCH}.flatpak"
+            else
+              echo "No Flatpak found (optional)"
+            fi
+          fi
+
       - name: List prepared assets
         shell: bash
         run: |
@@ -553,6 +571,7 @@ jobs:
             - **Windows**: `CC-Switch-${{ github.ref_name }}-Windows.msi`（安装版）或 `CC-Switch-${{ github.ref_name }}-Windows-Portable.zip`（绿色版）
             - **Linux (x86_64)**: `CC-Switch-${{ github.ref_name }}-Linux-x86_64.AppImage` / `.deb` / `.rpm`
             - **Linux (ARM64)**: `CC-Switch-${{ github.ref_name }}-Linux-arm64.AppImage` / `.deb` / `.rpm`
+            - **Linux (x86_64, Flatpak)**: `CC-Switch-${{ github.ref_name }}-Linux-x86_64.flatpak`
 
             > `.tar.gz` 为 Tauri updater 自动更新专用，无需手动下载。
 

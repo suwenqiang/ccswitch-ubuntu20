@@ -393,6 +393,21 @@ Download the latest Linux build from the [Releases](../../releases) page:
 - Rust 1.85+
 - Tauri CLI 2.8+
 
+### Reproducible Ubuntu 22.04 Build (Local)
+
+```bash
+# Validate Ubuntu 22.04 toolchain + dependencies
+scripts/ubuntu22-build-env.sh validate
+
+# Build Linux .deb in Ubuntu 22.04 container
+scripts/ubuntu22-build-env.sh build-deb
+```
+
+```bash
+# Build and smoke-check Flatpak artifact
+scripts/build-flatpak-artifact.sh
+```
+
 ### Development Commands
 
 ```bash
