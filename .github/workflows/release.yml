@@ -224,7 +224,22 @@ jobs:
 
       - name: Build Tauri App (Linux)
         if: runner.os == 'Linux'
-        run: pnpm tauri build --bundles appimage,deb,rpm
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "${TAURI_SIGNING_PRIVATE_KEY:-}" ]; then
+            pnpm tauri build --bundles appimage,deb,rpm
+          else
+            echo "⚠️ No signing private key; building Linux bundles without updater signatures."
+            cat > "$RUNNER_TEMP/tauri-linux-nosign.json" <<'JSON'
+            {
+              "bundle": {
+                "createUpdaterArtifacts": false
+              }
+            }
+            JSON
+            pnpm tauri build --bundles appimage,deb,rpm --config "$RUNNER_TEMP/tauri-linux-nosign.json"
+          fi
 
       - name: Build Flatpak Artifact (Linux x86_64)
         if: runner.os == 'Linux' && matrix.os == 'ubuntu-22.04'
