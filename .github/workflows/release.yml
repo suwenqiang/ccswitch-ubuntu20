@@ -231,13 +231,7 @@ jobs:
             pnpm tauri build --bundles appimage,deb,rpm
           else
             echo "⚠️ No signing private key; building Linux bundles without updater signatures."
-            cat > "$RUNNER_TEMP/tauri-linux-nosign.json" <<'JSON'
-            {
-              "bundle": {
-                "createUpdaterArtifacts": false
-              }
-            }
-            JSON
+            printf '%s\n' '{"bundle":{"createUpdaterArtifacts":false}}' > "$RUNNER_TEMP/tauri-linux-nosign.json"
             pnpm tauri build --bundles appimage,deb,rpm --config "$RUNNER_TEMP/tauri-linux-nosign.json"
           fi
 
